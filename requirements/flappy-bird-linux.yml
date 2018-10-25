@@ -19,5 +19,7 @@ dependencies:
   - pygame
   - pillow
   - tensorforce
+  - opencv-python
+  - opencv-contrib-python
  #- ple
 

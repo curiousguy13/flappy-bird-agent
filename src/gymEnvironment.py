@@ -22,25 +22,37 @@ class GymEnvironment(object):
         self.env.seed(seed)
     
     def train(self, agent, episodeCount, quiet):
-        reward=0
+        
         done=False
         rewards=list()
         for episode in range(episodeCount):
+            reward=0
+            timestep=0
             ob=self.env.reset()
             print(ob.shape)
             action = agent.act(ob, reward, done)
+            timestep+=1
             ob, reward, done, _ = self.env.step(action)
             #imgplot = plt.imshow(ob)
             #plt.show()
             while True:
                 action = agent.act(ob, reward, done)
+                timestep+=1
                 ob, reward, done, _ = self.env.step(action)
+                
+                #flappy specific reward function
+                if(reward!=-5):
+                    reward+=1
+                    print(reward)
                 if done:
                     break
 
                 if(not quiet):
                     self.env.render()
+                
             rewards.append(reward)
+            print(rewards)
+            
         self.env.close()   
     def test(self, agent, episodeCount, quiet):
         reward=0
