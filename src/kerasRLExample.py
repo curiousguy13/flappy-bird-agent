@@ -36,6 +36,17 @@ class GameProcessor(Processor):
         #cv2.imshow('bgremoved',fgmask)
         #return observation
         return processed_observation
+    def process_reward(self, reward):
+        if(reward==0):
+            reward = 1
+        if(reward==1):
+            reward = 10
+        if(reward=-1):
+            reward = -5
+        if(reward==-5):
+            reward = -10
+        return reward
+
 
 ENV_NAME = 'FlappyBird-v0'
 #flappyEnv=GymEnvironment('FlappyBird-v0')
@@ -56,10 +67,10 @@ model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Conv2D(32,(5,5)))
 model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(MaxPooling2D(pool_size=(4,4)))
 #model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(16))
+model.add(Dense(8))
 model.add(Activation('relu'))
 #model.add(Dense(16))
 #model.add(Activation('relu'))
@@ -81,7 +92,7 @@ dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
 #dqn.fit(env, nb_steps=50000, visualize=False, verbose=2)
-dqn.fit(env, nb_steps=50000, visualize=False, verbose=2)
+dqn.fit(env, nb_steps=5000, visualize=False, verbose=2)
 
 # After training is done, we save the final weights.
 dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
