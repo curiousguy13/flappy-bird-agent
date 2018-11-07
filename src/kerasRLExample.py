@@ -19,10 +19,10 @@ from PIL import Image
 SCALED_IMAGE_HEIGHT=80  
 SCALED_IMAGE_WIDTH=80
 WINDOW_LENGTH=4
-TRAINING_STEPS=500000
+TRAINING_STEPS=500
 TEST_EPISODES=5
 LOAD=False
-LOAD_FILE='dqn_FlappyBird-v0_weights_ep_1000000.h5f'
+LOAD_FILE='dqn_FlappyBird-v0_weights_ep_500000.h5f'
 ENV_NAME = 'FlappyBird-v0'
 
 def main():
@@ -82,8 +82,8 @@ def main():
     
     #initialize agent
     dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=TRAINING_STEPS/50,
-                target_model_update=5e-2, policy=policy, processor=processor)
-    dqn.compile(Adam(lr=1e-3), metrics=['mae'])
+                target_model_update=5e-2, policy=policy, processor=processor, gamma=0.95)
+    dqn.compile(Adam(lr=1e-3), metrics=['mse'])
 
     if(LOAD):
         dqn.load_weights(LOAD_FILE)
@@ -121,14 +121,31 @@ class GameProcessor(Processor):
     
     def process_observation(self, observation):
         
+        #print('og')
+        #imgplot = plt.imshow(observation)
+        #plt.show()
+        processed_observation=self.fgbg.apply(observation)
+        #print('bgsub')
+        #imgplot = plt.imshow(processed_observation)
+        #plt.show()
         #convert to grayscale
-        gray_image = cv2.cvtColor(observation, cv2.COLOR_BGR2GRAY)
+        #processed_observation = cv2.cvtColor(processed_observation, cv2.COLOR_BGR2GRAY)
         
         #downscale image for more manageable training 
-        processed_observation=cv2.resize(gray_image, (SCALED_IMAGE_HEIGHT, SCALED_IMAGE_WIDTH))
         
-        processed_observation=self.fgbg.apply(processed_observation)
+        #processed_observation=self.fgbg.apply(processed_observation)
+        #print('gray')
+        #imgplot = plt.imshow(processed_observation)
+        #lt.show()
+        #processed_observation=cv2.morphologyEx(processed_observation, cv2.MORPH_CLOSE, (5,5))
+        processed_observation=cv2.adaptiveThreshold(processed_observation,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+
+        #print('thresholding')
+        #imgplot = plt.imshow(processed_observation)
+        #plt.show()
         
+        #print('resize')
+        processed_observation=cv2.resize(processed_observation, (SCALED_IMAGE_HEIGHT, SCALED_IMAGE_WIDTH))
         #kernel=(3,3)
         #processed_observation = cv2.morphologyEx(processed_observation, cv2.MORPH_OPEN, kernel)
 
