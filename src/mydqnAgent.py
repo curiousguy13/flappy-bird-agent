@@ -113,7 +113,7 @@ class MyPolicy(Policy):
         if(currPipe<numberOfUniquePipesCrossedByAgent):
             eps=0.15
         else:
-            eps=0.8 - (0.75*n/10000)
+            eps=0.8 - (0.75*self.n/10000)
             self.n+=1
             if(eps<0.2):
                 n=0
