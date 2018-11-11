@@ -1,7 +1,7 @@
-#Overview
+### Overview
 Reinforcement Learning agents for playing flappy-bird game.
 
-#Installation
+### Installation
 ```
 git clone https://github.com/curiousguy13/flappy-bird-agent.git
 cd flappy-bird-agent
@@ -13,7 +13,7 @@ or
 sudo yum install libXext libSM libXrender (for CentOS/Fedora)
 ```
 
-#Usage
+### Usage
 ```
 cd src
 python mydqnagent.py
