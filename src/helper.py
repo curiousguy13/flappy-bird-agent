@@ -33,8 +33,8 @@ def preProcess(fgbg,frame):
     frame=fgbg.apply(frame)
     frame=cv2.adaptiveThreshold(frame,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
     frame=cv2.resize(frame, (SCALED_HEIGHT, SCALED_WIDTH))
-    imgplot = plt.imshow(frame)
-    plt.show()
+    #imgplot = plt.imshow(frame)
+    #plt.show()
     frame = np.reshape(frame,[np.prod(frame.shape)]) / 255.0
     return frame
 
