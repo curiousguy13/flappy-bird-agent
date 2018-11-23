@@ -22,7 +22,7 @@ LOAD_MODEL = False
 
 SCALED_HEIGHT=47
 SCALED_WIDTH=47
-TRAINING_EPISODES=5000
+TRAINING_EPISODES=20000
 TESTING_EPISODES=100
 GAMMA = .99 # discount rate 
 LEARNING_RATE = 1e-4
@@ -103,7 +103,7 @@ class Network():
             self.c3=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.c2, num_outputs=32,kernel_size=[3,3], stride=[2,2], padding='VALID')
             self.c4=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.c3, num_outputs=32,kernel_size=[3,3], stride=[2,2], padding='VALID')
 
-            fc0 = slim.fully_connected(slim.flatten(self.c2), 256, activation_fn=tf.nn.relu)
+            fc0 = slim.fully_connected(slim.flatten(self.c4), 256, activation_fn=tf.nn.relu)
 
             #RNN Layers
             lstm_cell = tf.contrib.rnn.BasicLSTMCell(256, state_is_tuple=True)
@@ -311,9 +311,9 @@ class Agent():
                     summary = tf.Summary()
                    
                     summary.value.add(tag='Performance/Mean Reward', simple_value=float(mean_reward))
-                    summary.value.add(tag='Performance/Reward', simple_value=float(self.episode_rewards[-1:]))
+                    summary.value.add(tag='Performance/Reward', simple_value=float(self.episode_rewards[-1:][0]))
                     summary.value.add(tag='Performance/Mean Episode Length', simple_value=float(mean_length))
-                    summary.value.add(tag='Performance/Episode Length', simple_value=float(self.episode_lengths[-1:]))
+                    summary.value.add(tag='Performance/Episode Length', simple_value=float(self.episode_lengths[-1:][0]))
                     summary.value.add(tag='Performance/Value', simple_value=float(mean_value))
                     
                     summary.value.add(tag='Losses/Value Loss', simple_value=float(value_loss))
@@ -340,7 +340,7 @@ def preProcess(fgbg,frame):
     #frame = scipy.misc.imresize(frame,[SCALED_HEIGHT,SCALED_WIDTH])
     #frame=frame[:,:,0]
     frame=fgbg.apply(frame)
-    #frame=cv2.adaptiveThreshold(frame,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    frame=cv2.adaptiveThreshold(frame,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
     frame=cv2.resize(frame, (SCALED_HEIGHT, SCALED_WIDTH))
     frame = np.reshape(frame,[np.prod(frame.shape)]) / 255.0
     return frame
