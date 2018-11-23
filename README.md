@@ -19,9 +19,9 @@ cd src
 python a3c.py
 ```
 
-All Configurations and hyper-parameters are in helper.py
-For Training:
-  Set TRAINING = True and TESTING = False in helper.py
-For Testing:
-  Set TRAINING = False and TESTING = True
-  In case of Testing, the latest saved model will be loaded
+All Configurations and hyper-parameters are in helper.py <br />
+For Training: <br />
+  Set TRAINING = True and TESTING = False in helper.py <br />
+For Testing: <br />
+  Set TRAINING = False and TESTING = True  <br />
+  In case of Testing, the latest saved model will be loaded <br />
