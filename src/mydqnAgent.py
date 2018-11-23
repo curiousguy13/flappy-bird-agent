@@ -19,14 +19,14 @@ from PIL import Image
 SCALED_IMAGE_HEIGHT=80  
 SCALED_IMAGE_WIDTH=80
 WINDOW_LENGTH=4
-TRAINING_STEPS=2000000
-TEST_EPISODES=5
+TRAINING_STEPS=5000000
+TEST_EPISODES=100
 LOAD=False
 LOAD_FILE='dqn_FlappyBird-v0_weights_ep_500000.h5f'
 ENV_NAME = 'FlappyBird-v0'
 numberOfUniquePipesCrossedByAgent=0
 currPipe=0
-
+numberOfEpisodes=0
 def main():
 
 
@@ -86,7 +86,7 @@ def main():
     
     #initialize agent
     dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=TRAINING_STEPS/50,
-                target_model_update=5e-2, policy=policy, processor=processor, gamma=0.95)
+                target_model_update=5e-3, policy=policy, processor=processor, gamma=0.99)
     dqn.compile(Adam(lr=1e-3), metrics=['mse'])
 
     if(LOAD):
@@ -95,7 +95,7 @@ def main():
         dqn.fit(env, nb_steps=TRAINING_STEPS, visualize=False, verbose=2)
 
         # After training is done, we save the final weights.
-        dqn.save_weights('dqn_{}_weights_ep_{}.h5f'.format(ENV_NAME, TRAINING_STEPS), overwrite=False)
+        dqn.save_weights('dqn_{}_weights_ep_{}.h5f'.format(ENV_NAME, TRAINING_STEPS), overwrite=True)
     
 
     #reset processor variables before testing
@@ -104,19 +104,12 @@ def main():
     processor.end=0
 
     #test our agent
-    dqn.test(env, nb_episodes=TEST_EPISODES, visualize=True)
+    dqn.test(env, nb_episodes=TEST_EPISODES, visualize=False)
     print('Test Score over ' + str(TEST_EPISODES) + ' episodes is : ' + str(processor.score))
 
 class MyPolicy(Policy):
-    n=0
     def select_action(self, q_values):
-        if(currPipe<numberOfUniquePipesCrossedByAgent):
-            eps=0.15
-        else:
-            eps=0.8 - (0.75*n/10000)
-            self.n+=1
-            if(eps<0.2):
-                n=0
+        eps=0.5*np.cos(2*3.14*numberOfEpisodes/40000)
         return EpsGreedyQPolicy(eps).select_action(q_values)
 class GameProcessor(Processor):
     
@@ -194,7 +187,7 @@ class GameProcessor(Processor):
             print('pipes crossed=',self.pipes_crossed)
             print('score=', self.score)
 
-
+            numberOfEpisodes=self.end
             numberOfUniquePipesCrossedByAgent=self.pipes_crossed_in_this_episode
             self.pipes_crossed_in_this_episode=0
             currPipe=0
