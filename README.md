@@ -16,5 +16,12 @@ sudo yum install libXext libSM libXrender (for CentOS/Fedora)
 ### Usage
 ```
 cd src
-python mydqnagent.py
+python a3c.py
 ```
+
+All Configurations and hyper-parameters are in helper.py
+For Training:
+  Set TRAINING = True and TESTING = False in helper.py
+For Testing:
+  Set TRAINING = False and TESTING = True
+  In case of Testing, the latest saved model will be loaded
