@@ -6,12 +6,12 @@ import scipy.signal
 import cv2      
 
 #change TRAINING to False and TESTING to True for testing
-TRAINING=True
+TRAINING=False
 #Will Load model if TESTING = TRUE 
-TESTING=False
+TESTING=True
 QUIET=True
 LOAD_MODEL = False
-TRAINING_EPISODES=6000
+TRAINING_EPISODES=10000
 TESTING_EPISODES=100
 SCALED_HEIGHT=47
 SCALED_WIDTH=47
