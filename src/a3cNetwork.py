@@ -15,12 +15,12 @@ class Network():
             #print('stateSize=',stateSize)
             #print('inputs=',self.inputs)
             #Convolutional Layers
-            self.c1=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.imageIn, num_outputs=32,kernel_size=[3,3], stride=[2,2], padding='VALID')
-            self.c2=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.c1, num_outputs=32,kernel_size=[3,3], stride=[2,2], padding='VALID')
-            self.c3=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.c2, num_outputs=32,kernel_size=[3,3], stride=[2,2], padding='VALID')
-            self.c4=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.c3, num_outputs=32,kernel_size=[3,3], stride=[2,2], padding='VALID')
+            self.c1=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.imageIn, num_outputs=8,kernel_size=[8,8], stride=[2,2], padding='VALID')
+            self.c2=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.c1, num_outputs=16,kernel_size=[4,4], stride=[2,2], padding='VALID')
+            self.c3=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.c2, num_outputs=32,kernel_size=[2,2], stride=[2,2], padding='VALID')
+            #self.c4=slim.conv2d(activation_fn=tf.nn.relu, inputs = self.c3, num_outputs=32,kernel_size=[3,3], stride=[2,2], padding='VALID')
 
-            fc0 = slim.fully_connected(slim.flatten(self.c4), 256, activation_fn=tf.nn.relu)
+            fc0 = slim.fully_connected(slim.flatten(self.c3), 256, activation_fn=tf.nn.relu)
 
             #RNN Layers
             lstm_cell = tf.contrib.rnn.BasicLSTMCell(256, state_is_tuple=True)

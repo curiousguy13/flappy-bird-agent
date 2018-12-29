@@ -22,7 +22,7 @@ MEMORY_BUFFER=30
 LEARNING_RATE = 1e-4
 stateSize = 2209 # size of input frames after preprocessing (47*47)
 actionSize = 2 
-MODEL_PATH = './a3cmodels'
+MODEL_PATH = './a3cmodels2'
 ENV_NAME = 'FlappyBird-v0'
 
 
@@ -30,8 +30,9 @@ ENV_NAME = 'FlappyBird-v0'
 
 #Pre-process input frame
 def preProcess(fgbg,frame):
-    frame=fgbg.apply(frame)
-    frame=cv2.adaptiveThreshold(frame,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    #frame=fgbg.apply(frame)
+    #frame=cv2.adaptiveThreshold(frame,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    frame=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frame=cv2.resize(frame, (SCALED_HEIGHT, SCALED_WIDTH))
     #imgplot = plt.imshow(frame)
     #plt.show()
